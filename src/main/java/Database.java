@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private static String url = "jdbc:postgresql://localhost:5432/postgres";
@@ -19,50 +21,74 @@ public class Database {
         return con;
     }
 
-    public static void getAllPersons(){
+    public static List<Person> getAllPersons(){
         PreparedStatement ps = null;
+        Person person = new Person();
+        List<Person> persons = new ArrayList<Person>();
         try {
             ps = con.prepareStatement("select * from person order by personid");
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                System.out.println(rs.getString("personid")
-                        + " " + rs.getString("name") + " " + rs.getString("email"));
+                person = new Person();
+                person.setPersonID(rs.getInt("personid"));
+                person.setName(rs.getString("name"));
+                person.setEmail(rs.getString("email"));
+
+                persons.add(person);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return persons;
     }
 
-    public static int insertPerson(String name, String email){
+    public static Person getPerson(Person person){
+        PreparedStatement ps = null;
+        try {
+            ps = con.prepareStatement("select * from person where personid = ?");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                person = new Person();
+                person.setPersonID(rs.getInt("personid"));
+                person.setName(rs.getString("name"));
+                person.setEmail(rs.getString("email"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return person;
+    }
+
+    public static int insertPerson(Person person){
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement("insert into person (name, email) values (?,?)");
-            ps.setString(1, name);
-            ps.setString(2, email);
+            ps.setString(1, person.getName());
+            ps.setString(2, person.getEmail());
             return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static int updatePerson(int personid, String name, String email){
+    public static int updatePerson(Person person){
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement("UPDATE person SET name = ?, email = ? WHERE personid = ?");
-            ps.setString(1, name);
-            ps.setString(2, email);
-            ps.setInt(3, personid);
+            ps.setString(1, person.getName());
+            ps.setString(2, person.getEmail());
+            ps.setInt(3, person.GetPersonID());
             return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static int deletePerson(int personid){
+    public static int deletePerson(Person person){
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement("Delete from person where personid = ?");
-            ps.setInt(1, personid);
+            ps.setInt(1, person.GetPersonID());
             return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -9,6 +9,15 @@ public class Person {
         this.email = email;
     }
 
+    public Person(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    public Person(int personID) {
+        this.personID = personID;
+    }
+
     public int GetPersonID() {
         return personID;
     }
