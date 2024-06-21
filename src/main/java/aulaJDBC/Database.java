@@ -1,3 +1,5 @@
+package aulaJDBC;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class Database {
                 System.out.println("Connected to PostgreSQL database");
             }
         } catch (SQLException e) {
-            System.out.println("Database connection failed");
+            System.out.println("aulaJDBC.Database connection failed");
             throw new RuntimeException(e);
         }
         return con;
@@ -46,9 +48,9 @@ public class Database {
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement("select * from person where personid = ?");
+            ps.setInt(1, person.GetPersonID());
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
-                person = new Person();
                 person.setPersonID(rs.getInt("personid"));
                 person.setName(rs.getString("name"));
                 person.setEmail(rs.getString("email"));

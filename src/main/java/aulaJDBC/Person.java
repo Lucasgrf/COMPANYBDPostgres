@@ -1,3 +1,5 @@
+package aulaJDBC;
+
 public class Person {
     private int personID;
     private String name;
@@ -47,7 +49,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "aulaJDBC.Person{" +
                 "personID=" + personID +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
