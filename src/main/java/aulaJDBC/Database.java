@@ -25,7 +25,7 @@ public class Database {
 
     public static List<Person> getAllPersons(){
         PreparedStatement ps = null;
-        Person person = new Person();
+        Person person = null;
         List<Person> persons = new ArrayList<Person>();
         try {
             ps = con.prepareStatement("select * from person order by personid");
